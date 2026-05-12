@@ -1,11 +1,28 @@
-# Spam Email Detection with Naive Bayes
+# Spam Email Detection with Multiple Classifiers
 
-This project trains a Naive Bayes classifier to detect whether an email is spam or not spam.
+This project trains multiple machine learning classifiers to detect whether an email is spam or not spam, including Naive Bayes, Decision Tree, and Random Forest.
 
 The dataset has two columns:
 
 - `text`: the email content
 - `spam`: the label, where `1` means spam and `0` means not spam
+
+## Algorithms Used
+
+### Naive Bayes
+- **Description**: A probabilistic classifier based on Bayes' theorem, assuming independence between features. Uses MultinomialNB for text classification.
+- **Pros**: Fast training, works well with high-dimensional data like text.
+- **Cons**: Assumes feature independence, which may not hold for complex text.
+
+### Decision Tree
+- **Description**: Builds a tree by recursively splitting data based on feature values to minimize impurity. Uses DecisionTreeClassifier from sklearn.
+- **Pros**: Interpretable, handles non-linear relationships.
+- **Cons**: Prone to overfitting, especially on noisy data.
+
+### Random Forest
+- **Description**: An ensemble of multiple decision trees, averaging predictions to reduce overfitting. Uses RandomForestClassifier with 100 estimators.
+- **Pros**: Robust, handles overfitting better than single trees, good generalization.
+- **Cons**: Slower training, less interpretable than single trees.
 
 ## Project Structure
 
@@ -20,18 +37,27 @@ Spam_Email_Naive_Bayes/
 |       `-- test.csv
 |-- models/
 |   |-- naive_bayes_model.pkl
+|   |-- decision_tree_model.pkl
+|   |-- random_forest_model.pkl
 |   `-- vectorizer.pkl
 |-- notebooks/
 |   |-- 01.basic_eda.ipynb
 |   |-- 02_data_split.ipynb
 |   `-- 03_train_naive_bayes.ipynb
 |-- reports/
-|   `-- classification_report.txt
+|   |-- classification_report.txt
+|   |-- decision_tree_classification_report.txt
+|   |-- random_forest_classification_report.txt
+|   |-- accuracy_comparison.png
+|   `-- project_report.docx
 |-- scripts/
 |   |-- main.py
 |   |-- split_data.py
 |   |-- train_model.py
-|   `-- predict.py
+|   |-- train_decision_tree.py
+|   |-- train_random_forest.py
+|   |-- predict.py
+|   `-- generate_project_report.py
 `-- requirements.txt
 ```
 
@@ -142,7 +168,9 @@ You can also generate the processed data from the terminal:
 python scripts/split_data.py
 ```
 
-### 4. Train the Naive Bayes Model
+### 4. Train the Models
+
+#### Naive Bayes Model
 
 Use this notebook:
 
@@ -150,7 +178,29 @@ Use this notebook:
 notebooks/03_train_naive_bayes.ipynb
 ```
 
-This notebook does these steps:
+Or from the terminal:
+
+```powershell
+python scripts/train_model.py
+```
+
+#### Decision Tree Model
+
+From the terminal:
+
+```powershell
+python scripts/train_decision_tree.py
+```
+
+#### Random Forest Model
+
+From the terminal:
+
+```powershell
+python scripts/train_random_forest.py
+```
+
+All scripts do these steps:
 
 1. Loads `train.csv`, `validation.csv`, and `test.csv`.
 2. Separates features and labels:
@@ -159,7 +209,7 @@ This notebook does these steps:
 3. Converts email text into word-count features using `CountVectorizer`.
 4. Fits the vectorizer only on training data.
 5. Transforms validation and test data using the same vectorizer.
-6. Trains `MultinomialNB`.
+6. Trains the classifier (MultinomialNB, DecisionTreeClassifier, or RandomForestClassifier).
 7. Checks validation accuracy.
 8. Checks final test accuracy.
 9. Saves the trained model and vectorizer.
@@ -174,30 +224,66 @@ X_test_vec = vectorizer.transform(X_test)
 
 The vectorizer should be fitted only on train data. Validation and test data should only be transformed. This prevents data leakage.
 
-You can also train from the terminal:
-
-```powershell
-python scripts/train_model.py
-```
-
 After training, these files are created:
 
 ```text
 models/naive_bayes_model.pkl
+models/decision_tree_model.pkl
+models/random_forest_model.pkl
 models/vectorizer.pkl
 reports/classification_report.txt
+reports/decision_tree_classification_report.txt
+reports/random_forest_classification_report.txt
 ```
 
-### 5. Model Evaluation
+### 5. Model Evaluation and Comparison
 
-The training script evaluates the model on train, validation, and test data.
+The training scripts evaluate each model on train, validation, and test data.
 
-Current result:
+Current results:
 
-```text
-Train Accuracy:      0.9970
-Validation Accuracy: 0.9930
-Test Accuracy:       0.9843
+- **Naive Bayes**:
+  - Train Accuracy:      0.9970
+  - Validation Accuracy: 0.9930
+  - Test Accuracy:       0.9843
+
+- **Decision Tree**:
+  - Train Accuracy:      1.0000
+  - Validation Accuracy: 0.9572
+  - Test Accuracy:       0.9616
+
+- **Random Forest**:
+  - Train Accuracy:      1.0000
+  - Validation Accuracy: 0.9852
+  - Test Accuracy:       0.9773
+
+To generate a comprehensive report with accuracy graphs:
+
+```powershell
+python scripts/generate_project_report.py
+```
+
+This creates `reports/project_report.docx` and `reports/accuracy_comparison.png`.
+
+### 6. Prediction
+
+Use the prediction script to classify new emails:
+
+```powershell
+python scripts/predict.py
+```
+
+This loads the trained models and vectorizer, takes user input, and predicts spam/not spam.
+
+## Python Scripts Overview
+
+- `split_data.py`: Splits raw data into train/validation/test CSVs.
+- `train_model.py`: Trains Naive Bayes model.
+- `train_decision_tree.py`: Trains Decision Tree model.
+- `train_random_forest.py`: Trains Random Forest model.
+- `predict.py`: Loads models and predicts on new text.
+- `generate_project_report.py`: Generates a Word document report with results and graphs.
+- `main.py`: General entry point (may be unused).
 ```
 
 Test confusion matrix:
