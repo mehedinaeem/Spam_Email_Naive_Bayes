@@ -1,0 +1,44 @@
+Train Accuracy: 1.0000
+Train Classification Report:
+              precision    recall  f1-score   support
+
+    Not Spam     1.0000    1.0000    1.0000      3052
+        Spam     1.0000    1.0000    1.0000       957
+
+    accuracy                         1.0000      4009
+   macro avg     1.0000    1.0000    1.0000      4009
+weighted avg     1.0000    1.0000    1.0000      4009
+
+Train Confusion Matrix [[TN, FP], [FN, TP]]:
+[[3052    0]
+ [   0  957]]
+
+Validation Accuracy: 0.9572
+Validation Classification Report:
+              precision    recall  f1-score   support
+
+    Not Spam     0.9790    0.9644    0.9717       872
+        Spam     0.8920    0.9343    0.9127       274
+
+    accuracy                         0.9572      1146
+   macro avg     0.9355    0.9494    0.9422      1146
+weighted avg     0.9582    0.9572    0.9576      1146
+
+Validation Confusion Matrix [[TN, FP], [FN, TP]]:
+[[841  31]
+ [ 18 256]]
+
+Test Accuracy: 0.9616
+Test Classification Report:
+              precision    recall  f1-score   support
+
+    Not Spam     0.9770    0.9725    0.9747       436
+        Spam     0.9137    0.9270    0.9203       137
+
+    accuracy                         0.9616       573
+   macro avg     0.9453    0.9497    0.9475       573
+weighted avg     0.9618    0.9616    0.9617       573
+
+Test Confusion Matrix [[TN, FP], [FN, TP]]:
+[[424  12]
+ [ 10 127]]

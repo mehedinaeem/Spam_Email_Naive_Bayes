@@ -1,13 +1,13 @@
-# train_decision_tree.py
-# Adapted from train_model.py for Decision Tree Classifier
+# train_random_forest.py
+# Adapted from train_model.py for Random Forest Classifier
 
 from pathlib import Path
 
 import joblib
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-from sklearn.tree import DecisionTreeClassifier
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT_DIR / "data" / "processed"
@@ -58,7 +58,7 @@ def main():
     vectorizer = CountVectorizer(stop_words="english")
     x_train_vec = vectorizer.fit_transform(x_train)
 
-    model = DecisionTreeClassifier(random_state=42)  # You can tune hyperparameters here
+    model = RandomForestClassifier(n_estimators=100, random_state=42)  # You can tune hyperparameters here
     model.fit(x_train_vec, y_train)
 
     sections = [
@@ -71,14 +71,14 @@ def main():
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    joblib.dump(model, MODELS_DIR / "decision_tree_model.pkl")
+    joblib.dump(model, MODELS_DIR / "random_forest_model.pkl")
     joblib.dump(vectorizer, MODELS_DIR / "vectorizer.pkl")  # Reusing the same vectorizer
-    (REPORTS_DIR / "decision_tree_classification_report.txt").write_text(report_text, encoding="utf-8")
+    (REPORTS_DIR / "random_forest_classification_report.txt").write_text(report_text, encoding="utf-8")
 
     print(report_text)
-    print(f"Saved model to: {MODELS_DIR / 'decision_tree_model.pkl'}")
+    print(f"Saved model to: {MODELS_DIR / 'random_forest_model.pkl'}")
     print(f"Saved vectorizer to: {MODELS_DIR / 'vectorizer.pkl'}")
-    print(f"Saved report to: {REPORTS_DIR / 'decision_tree_classification_report.txt'}")
+    print(f"Saved report to: {REPORTS_DIR / 'random_forest_classification_report.txt'}")
 
 if __name__ == "__main__":
     main()
